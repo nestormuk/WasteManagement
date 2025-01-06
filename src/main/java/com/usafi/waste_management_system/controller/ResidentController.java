@@ -28,5 +28,6 @@ public class ResidentController {
         }
         return new ResponseEntity<>(saveResident, HttpStatus.CREATED);
 
+
     }
 }
