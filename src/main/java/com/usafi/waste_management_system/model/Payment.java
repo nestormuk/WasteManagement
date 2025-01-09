@@ -19,17 +19,17 @@ public class Payment {
     private EPaymentStatus status=EPaymentStatus.Unpaid;
 
     @ManyToOne
-    @JoinColumn(name = "resident_id")
-    private Resident resident;
+    @JoinColumn(name = "user_id")
+    private Users users;
 
     public Payment() {
     }
 
-    public Payment(double amount, Date date, EPaymentStatus status, Resident resident) {
+    public Payment(double amount, Date date, EPaymentStatus status, Users users) {
         this.amount = amount;
         this.date = date;
         this.status = status;
-        this.resident = resident;
+        this.users = users;
     }
 
     public UUID getId() {
@@ -64,11 +64,11 @@ public class Payment {
         this.status = status;
     }
 
-    public Resident getResident() {
-        return resident;
+    public Users getResident() {
+        return users;
     }
 
-    public void setResident(Resident resident) {
-        this.resident = resident;
+    public void setResident(Users users) {
+        this.users = users;
     }
 }
