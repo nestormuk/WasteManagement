@@ -126,8 +126,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Optional<Users> loadUserByUsername(String email) {
-        return userRepository.findByEmail(email);
+    public Users loadUserByUsername(String email) {
+        Optional<Users> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+        return user.get();
     }
 
 

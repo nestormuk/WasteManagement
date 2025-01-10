@@ -13,7 +13,7 @@ public interface IUserService {
     String generateOtp(String email);  // Generate OTP for email
     boolean verifyOtp(String email, String otp);
 
-    Optional<Users> loadUserByUsername(String email);
+   Users loadUserByUsername(String email);
 
 
 }

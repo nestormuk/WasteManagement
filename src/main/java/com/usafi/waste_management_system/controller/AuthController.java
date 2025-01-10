@@ -15,54 +15,64 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:8080"})
 public class AuthController {
 
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
+    public AuthController(IUserService userService, JwtTokenProvider jwtTokenProvider) {
+        this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Users user) {
         try {
             Users registeredUser = userService.registerUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
+            String token = jwtTokenProvider.generateToken(registeredUser);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
+                    "message", "Registration successful!",
+                    "token", token,
+                    "user", registeredUser
+            ));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("error", "Registration failed: " + ex.getMessage()));
         }
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
         try {
-            // Validate user credentials
             Users user = userService.login(credentials.get("email"), credentials.get("password"));
-
-            // Generate JWT Token
             String token = jwtTokenProvider.generateToken(user);
 
-            return ResponseEntity.ok(Map.of("message", "Login successful!", "token", token, "user", user));
+            return ResponseEntity.ok(Map.of(
+                    "message", "Login successful!",
+                    "token", token,
+                    "user", user
+            ));
         } catch (IllegalStateException | BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", ex.getMessage()));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", ex.getMessage()));
         } catch (UsernameNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "User not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "User not found"));
         }
     }
-
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestParam String email) {
         userService.forgotPassword(email);
-        return ResponseEntity.ok("Password reset email sent");
+        return ResponseEntity.ok(Map.of("message", "Password reset email sent"));
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestParam int code, @RequestParam String newPassword) {
         userService.resetPassword(code, newPassword);
-        return ResponseEntity.ok("Password reset successfully");
+        return ResponseEntity.ok(Map.of("message", "Password reset successfully"));
     }
 
     @PostMapping("/verify-otp")
@@ -70,16 +80,14 @@ public class AuthController {
         String email = requestData.get("email");
         String otp = requestData.get("otp");
 
-//        / Log received email and OTP
-        System.out.println("Received OTP request for email1: " + email + " with OTP: " + otp);
-
+        System.out.println("Received OTP request for email: " + email + " with OTP: " + otp);
 
         boolean isOtpValid = userService.verifyOtp(email, otp);
         if (isOtpValid) {
-            return ResponseEntity.ok("OTP verified successfully");
+            return ResponseEntity.ok(Map.of("message", "OTP verified successfully"));
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid OTP");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Invalid OTP"));
         }
     }
-
 }
