@@ -1,8 +1,14 @@
 package com.usafi.waste_management_system.controller;
 
+import com.usafi.waste_management_system.model.CollectionSchedule;
+import com.usafi.waste_management_system.model.Complaint;
+import com.usafi.waste_management_system.model.Payment;
 import com.usafi.waste_management_system.model.Users;
 import com.usafi.waste_management_system.repository.IUserRepository;
 
+import com.usafi.waste_management_system.service.CollectionScheduleServiceImpl;
+import com.usafi.waste_management_system.service.ComplaintServiceImpl;
+import com.usafi.waste_management_system.service.PaymentServiceImpl;
 import com.usafi.waste_management_system.util.EAccountStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -52,6 +59,14 @@ public class DashboardController {
                 "user", user
         ));
     }
+    @Autowired
+    private PaymentServiceImpl paymentServiceImpl;
+
+    @Autowired
+    private CollectionScheduleServiceImpl collectionScheduleServiceImpl;
+
+    @Autowired
+    private ComplaintServiceImpl complaintService;
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER')")
@@ -59,12 +74,25 @@ public class DashboardController {
         Users user = getCurrentUser();
 
         if (user.getAccountStatus() == EAccountStatus.PENDING) {
-            return ResponseEntity.status(403).body(Map.of("message", "Your1 account is pending verification. Please wait for approval."));
+            return ResponseEntity.status(403).body(Map.of(
+                    "message", "Your account is pending verification. Please wait for approval."
+            ));
         }
+
+        // Fetch data using services
+        List<Payment> payments = paymentServiceImpl.getPaymentByUserId(user.getId());
+        List<Complaint> complaints = complaintService.getComplaintByUserId(user.getId());
+        List<CollectionSchedule> collectionSchedules = collectionScheduleServiceImpl.getAllCollectionSchedule();
 
         return ResponseEntity.ok(Map.of(
                 "message", "User dashboard data retrieved successfully",
-                "user", user
+                "user", user,
+                "payments", payments != null ? payments : List.of(),
+                "complaints", complaints != null ? complaints : List.of(),
+                "collectionSchedules", collectionSchedules != null ? collectionSchedules : List.of()
         ));
     }
+
+
+
 }
