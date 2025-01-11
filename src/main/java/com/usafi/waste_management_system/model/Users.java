@@ -1,5 +1,6 @@
 package com.usafi.waste_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.usafi.waste_management_system.util.EAccountStatus;
 import com.usafi.waste_management_system.util.EUserRole;
 import jakarta.persistence.*;
@@ -51,9 +52,11 @@ public class Users implements UserDetails {
     private EUserRole role = EUserRole.USER;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Complaint> complaints;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Payment> payments;
 
 

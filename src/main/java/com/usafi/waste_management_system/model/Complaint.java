@@ -1,5 +1,6 @@
 package com.usafi.waste_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.usafi.waste_management_system.util.EComplaintStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -24,6 +25,7 @@ public class Complaint {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private Users users;
 
     public Complaint() {
