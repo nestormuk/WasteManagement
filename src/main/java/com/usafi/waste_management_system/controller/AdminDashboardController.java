@@ -42,8 +42,7 @@ public class AdminDashboardController {
             dashboardData.put("users", users);
             dashboardData.put("totalUsers", users.size());
 
-            // You can add more dashboard data here using other services
-            // Example:
+
             // dashboardData.put("totalPayments", paymentService.getTotalPayments());
             // dashboardData.put("activeComplaints", complaintService.getActiveComplaints());
             // dashboardData.put("upcomingCollections", collectionScheduleService.getUpcomingSchedules());
@@ -56,7 +55,7 @@ public class AdminDashboardController {
         }
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllUsers() {
         try {
@@ -68,6 +67,7 @@ public class AdminDashboardController {
                     .body("Error fetching users: " + e.getMessage());
         }
     }
+
 
     @GetMapping("/users/{email}")
     @PreAuthorize("hasRole('ADMIN')")

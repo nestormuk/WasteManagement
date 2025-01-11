@@ -152,7 +152,7 @@ public class UserServiceImpl implements IUserService {
         if (userOptional.isPresent()) {
             Users user = userOptional.get();
             user.setEmail(users.getEmail());
-            user.setRole((user.getRole()));
+            user.setRole((users.getRole()));
             user.setName(users.getName());
             user.setAccountStatus(users.getAccountStatus());
             user.setLocation(users.getLocation());

@@ -67,6 +67,9 @@ public class Users implements UserDetails {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<GrantedAuthority> authorities;
+
     @Override
     public String getUsername() {
         return email;
