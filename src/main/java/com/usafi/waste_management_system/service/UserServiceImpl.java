@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.*;
@@ -132,6 +133,44 @@ public class UserServiceImpl implements IUserService {
             throw new UsernameNotFoundException("User not found with email: " + email);
         }
         return user.get();
+    }
+
+    @Override
+    public Users findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
+    public List<Users> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+
+    public Users updateUserByEmail(String email, Users users) {
+        Optional<Users> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            Users user = userOptional.get();
+            user.setEmail(users.getEmail());
+            user.setRole((user.getRole()));
+            user.setName(users.getName());
+            user.setAccountStatus(users.getAccountStatus());
+            user.setLocation(users.getLocation());
+            return userRepository.save(user);
+        }
+        throw new UsernameNotFoundException("User not found with email: " + email);
+    }
+
+    @Override
+    @Transactional
+    public String deleteUser(String email) {
+        Optional<Users> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            userRepository.delete(userOptional.get());
+            return "User deleted successfully.";
+        }
+        throw new UsernameNotFoundException("User not found with email: " + email);
+
     }
 
 

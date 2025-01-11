@@ -4,7 +4,9 @@ import com.usafi.waste_management_system.model.Complaint;
 import com.usafi.waste_management_system.model.Users;
 import com.usafi.waste_management_system.repository.IUserRepository;
 import com.usafi.waste_management_system.service.ComplaintServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,15 +35,24 @@ public class ComplaintController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    @PostMapping("/submit")
-    public ResponseEntity<?> submitComplaint(@RequestBody Complaint complaint ) {
-        Users user = getCurrentUser();
-        complaint.setUsers(user);
+    @PostMapping(value = "/submit")
+    public ResponseEntity<?> submitComplaint(@RequestBody @Valid Complaint complaint) {
+        try {
+            Users user = getCurrentUser();
+            complaint.setUsers(user);
+            complaint.setDate(new java.util.Date());
 
-        Complaint complaints = complaintService.createComplaint(complaint);
-        return ResponseEntity.ok(Map.of(
-                "message",
-                "Complaint submitted successfully",
-                "complaint", complaints));
+            Complaint savedComplaint = complaintService.createComplaint(complaint);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of(
+                            "message", "Complaint submitted successfully",
+                            "complaint", savedComplaint
+                    ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Failed to submit complaint: " + e.getMessage()));
+        }
     }
 }

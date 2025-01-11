@@ -12,4 +12,5 @@ public interface IUserRepository extends JpaRepository<Users, UUID> {
 
     Optional<Users> findByEmail(String email);
     Optional<Users> findByVerificationCode(int code);
+    String deleteByEmail(String email);
 }

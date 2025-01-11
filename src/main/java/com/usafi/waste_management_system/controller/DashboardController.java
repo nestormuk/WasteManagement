@@ -30,6 +30,14 @@ public class DashboardController {
 
     @Autowired
     private IUserRepository usersRepository;
+    @Autowired
+    private PaymentServiceImpl paymentServiceImpl;
+
+    @Autowired
+    private CollectionScheduleServiceImpl collectionScheduleServiceImpl;
+
+    @Autowired
+    private ComplaintServiceImpl complaintService;
 
     private Users getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -59,14 +67,7 @@ public class DashboardController {
                 "user", user
         ));
     }
-    @Autowired
-    private PaymentServiceImpl paymentServiceImpl;
 
-    @Autowired
-    private CollectionScheduleServiceImpl collectionScheduleServiceImpl;
-
-    @Autowired
-    private ComplaintServiceImpl complaintService;
 
     @GetMapping("/user")
     @PreAuthorize("hasRole('USER')")

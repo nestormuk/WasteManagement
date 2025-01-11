@@ -1,6 +1,7 @@
 package com.usafi.waste_management_system.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.usafi.waste_management_system.util.EAccountStatus;
 import com.usafi.waste_management_system.util.EUserRole;
 import jakarta.persistence.*;
@@ -49,14 +50,15 @@ public class Users implements UserDetails {
     @Column(name = "verification_exp")
     private Date verificationExp;
 
+    @Enumerated(EnumType.STRING)
     private EUserRole role = EUserRole.USER;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonManagedReference("user-complaints")
     private List<Complaint> complaints;
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference("user-payments")
     private List<Payment> payments;
 
 

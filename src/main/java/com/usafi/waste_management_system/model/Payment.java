@@ -1,5 +1,6 @@
 package com.usafi.waste_management_system.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.usafi.waste_management_system.util.EPaymentStatus;
 import jakarta.persistence.*;
 
@@ -20,6 +21,7 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference("user-payments")
     private Users users;
 
     public Payment() {

@@ -3,6 +3,7 @@ package com.usafi.waste_management_system.service;
 
 import com.usafi.waste_management_system.model.Users;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IUserService {
@@ -14,6 +15,7 @@ public interface IUserService {
     boolean verifyOtp(String email, String otp);
 
    Users loadUserByUsername(String email);
-
-
+   Users findUserByEmail(String email);
+   List<Users> findAllUsers();
+   String deleteUser(String email);
 }
