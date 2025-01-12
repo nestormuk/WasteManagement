@@ -66,11 +66,11 @@ public class Payment {
         this.status = status;
     }
 
-    public Users getResident() {
+    public Users getUsers() {
         return users;
     }
 
-    public void setResident(Users users) {
+    public void setUsers(Users users) {
         this.users = users;
     }
 }
