@@ -41,8 +41,21 @@
 #
 #EXPOSE 8080
 
-FROM openjdk:17
+#FROM openjdk:17
+#WORKDIR /app
+#COPY target/waste_management_system-0.0.1-SNAPSHOT.jar .
+#EXPOSE 8080
+#CMD ["java", "-jar", "waste_management_system-0.0.1-SNAPSHOT.jar"]
+
+
+FROM eclipse-temurin:17-jdk-focal
+ 
 WORKDIR /app
-COPY target/waste_management_system-0.0.1-SNAPSHOT.jar .
-EXPOSE 8080
-CMD ["java", "-jar", "waste_management_system-0.0.1-SNAPSHOT.jar"]
+ 
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
+ 
+COPY src ./src
+ 
+CMD ["./mvnw", "spring-boot:run"]
