@@ -48,14 +48,18 @@
 #CMD ["java", "-jar", "waste_management_system-0.0.1-SNAPSHOT.jar"]
 
 
-FROM eclipse-temurin:17-jdk-focal
+# FROM eclipse-temurin:17-jdk-focal
  
-WORKDIR /app
+# WORKDIR /app
  
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
+# COPY .mvn/ .mvn
+# COPY mvnw pom.xml ./
+# RUN ./mvnw dependency:go-offline
  
-COPY src ./src
+# COPY src ./src
  
-CMD ["./mvnw", "spring-boot:run"]
+# CMD ["./mvnw", "spring-boot:run"]
+
+FROM openjdk:17
+ADD target/waste_management_system-0.0.1-SNAPSHOT.jar app1.jar
+ENTRYPOINT [ "java", "-jar","app1.jar" ]
