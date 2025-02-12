@@ -117,6 +117,24 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.google.cloud/spring-cloud-gcp-starter-sql-postgresql &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.google.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-gcp-starter-sql-postgresql</artifactId>-->
+<!--            <version>6.0.0</version>-->
+<!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/com.google.cloud.sql/postgres-socket-factory -->
+        <dependency>
+            <groupId>com.google.cloud.sql</groupId>
+            <artifactId>postgres-socket-factory</artifactId>
+            <version>1.23.0</version>
+        </dependency>
+
+
+
+
     </dependencies>
 
     <build>

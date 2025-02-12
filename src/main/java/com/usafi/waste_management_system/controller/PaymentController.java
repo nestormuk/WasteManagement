@@ -20,7 +20,7 @@ public class PaymentController {
     @Autowired
     private PaymentServiceImpl paymentService;
 
-    // Create a new payment
+
     @PostMapping("/createPayment")
     public ResponseEntity<?> createPayment(@RequestBody Payment payment) {
         Payment createdPayment = paymentService.createPayment(payment);
@@ -30,21 +30,21 @@ public class PaymentController {
         return ResponseEntity.ok(createdPayment);
     }
 
-    // Get all payments
+
     @GetMapping("/getAllPayments")
     public ResponseEntity<List<Payment>> getAllPayments() {
         List<Payment> payments = paymentService.getAllPayment();
         return ResponseEntity.ok(payments);
     }
 
-    // Get payments by user ID
+
     @GetMapping("/getPaymentByUser/{userId}")
     public ResponseEntity<List<Payment>> getPaymentsByUserId(@PathVariable UUID userId) {
         List<Payment> payments = paymentService.getPaymentByUserId(userId);
         return ResponseEntity.ok(payments);
     }
 
-    // Get payment by user ID and date
+
     @GetMapping("/paymentByUserDate/{userEmail}/date/{date}")
     public ResponseEntity<Payment> getPaymentByUserAndDate(
             @PathVariable String userEmail,
@@ -57,8 +57,8 @@ public class PaymentController {
     }
 
 
-    // Delete payment by user ID and date
-    @DeleteMapping("/user/{userId}/date/{date}")
+
+    @DeleteMapping("/DeleteUser/{userId}/date/{date}")
     public ResponseEntity<String> deletePaymentByUserAndDate(
             @PathVariable String userId,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
@@ -66,8 +66,8 @@ public class PaymentController {
         return ResponseEntity.ok(result);
     }
 
-    // Update payment by user ID and date
-    @PutMapping("/user/{userId}/date/{date}")
+
+    @PutMapping("/UpdateUser/{userId}/date/{date}")
     public ResponseEntity<String> updatePaymentByUserAndDate(
             @PathVariable String userId,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
