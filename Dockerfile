@@ -60,6 +60,8 @@
  
 # CMD ["./mvnw", "spring-boot:run"]
 
-FROM openjdk:17
-ADD target/waste_management_system-0.0.1-SNAPSHOT.jar app1.jar
-ENTRYPOINT [ "java", "-jar","app1.jar" ]
+FROM openjdk:17-jdk-alpine
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+COPY . /app
+ENTRYPOINT [ "java", "-jar","/app/target/waste_management_system-0.0.1-SNAPSHOT.jar" ]
