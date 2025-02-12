@@ -43,6 +43,6 @@
 
 FROM openjdk:17
 WORKDIR /app
-COPY ./target/waste_management_system-0.0.1-SNAPSHOT.jar /app
+COPY target/waste_management_system-0.0.1-SNAPSHOT.jar .
 EXPOSE 8080
 CMD ["java", "-jar", "waste_management_system-0.0.1-SNAPSHOT.jar"]
